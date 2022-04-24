@@ -139,7 +139,7 @@
 (defn raft-info-str
   "Returns the current cluster state as a string."
   []
-  (cli! :--raw "INFO" "redisraft"))
+  (cli! :--raw "INFO" "raft"))
 
 (defn parse-raft-info-node
   "Parses a node string in a raft-info string, which is a list of k=v pairs."
@@ -160,21 +160,21 @@
   [section k v]
   (let [k (keyword k)]
     (case section
-      :redisraft_raft     (case k
-                            (:redisraft_role :redisraft_state) [[section k] (keyword v)]
+      :raft_general (case k
+                      (:raft_role :raft_state) [[section k] (keyword v)]
 
-                            (:redisraft_node_id :redisraft_leader_id :redisraft_current_term :redisraft_num_nodes)
-                            [[section k] (parse-long v)]
+                      (:raft_node_id :raft_leader_id :raft_current_term :raft_num_nodes)
+                      [[section k] (parse-long v)]
 
-                            (if (re-find #"^redisraft_node(\d+)$" (name k))
-                              ; This is a node1, node2, ... entry; file it in :nodes
-                              [[section :nodes k] (parse-raft-info-node v)]
-                              [[section k] v]))
-      :redisraft_log      [[section k] (parse-long v)]
-      :redisraft_snapshot [[section k] v]
-      :redisraft_clients  (case k
-                            :redisraft_clients_in_multi_state [[section k] (parse-long v)]
-                            [[section k] v])
+                      (if (re-find #"^raft_node(\d+)$" (name k))
+                        ; This is a node1, node2, ... entry; file it in :nodes
+                        [[section :nodes k] (parse-raft-info-node v)]
+                        [[section k] v]))
+      :raft_log      [[section k] (parse-long v)]
+      :raft_snapshot [[section k] v]
+      :raft_clients  (case k
+                       :raft_clients_in_multi_state [[section k] (parse-long v)]
+                       [[section k] v])
       [[section k] v])))
 
 (defn raft-info
@@ -216,7 +216,7 @@
                   (warn e "Crash fetching raft-info")
                   :retry))]
     (if (or (= :retry r)
-            (= id (:redisraft_node_id (:raft r)))
+            (= id (:raft_node_id (:raft r)))
             (some #{id} (map :id (:nodes (:raft r)))))
       (do (info :waiting-for-removal id)
           (Thread/sleep 1000)
@@ -264,8 +264,8 @@
                                                  {:id   (:id n)
                                                   :node (ip->node (:addr n))}))
                                           ; Local node
-                                          (cons {:id  (:redisraft_node_id r)
-                                                 :role (:redisraft_role r)
+                                          (cons {:id  (:raft_node_id r)
+                                                 :role (:raft_role r)
                                                  :node node})))
                                    ; Couldn't run redis-cli
                                    (catch [:exit 1]   e [])
