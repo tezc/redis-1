@@ -427,15 +427,15 @@
              :chdir   dir}
             binary
             ; config-file
-            :--protected-mode         "no"
-            :--bind                   "0.0.0.0"
-            :--dbfilename             db-file
-            :--loadmodule             (str dir "/redisraft.so")
-            :loglevel                 "debug"
-            :raft-log-filename        raft-log-file
-            :raft-log-max-file-size   (:raft-log-max-file-size test)
-            :raft-log-max-cache-size  (:raft-log-max-cache-size test)
-            :follower-proxy           (get {false "no" true "yes"} (:follower-proxy test))
+            :--protected-mode           "no"
+            :--bind                     "0.0.0.0"
+            :--dbfilename               db-file
+            :--loadmodule               (str dir "/redisraft.so")
+            :--raft.loglevel            "debug"
+            :--raft.log-filename        raft-log-file
+            :--raft.log-max-file-size   (:raft-log-max-file-size test)
+            :--raft.log-max-cache-size  (:raft-log-max-cache-size test)
+            :--raft.follower-proxy      (get {false "no" true "yes"} (:follower-proxy test))
             )))
 
       (kill! [_ test node]
