@@ -212,6 +212,7 @@
   (let [r (try+ (raft-info)
                 (catch [:exit 1] e :retry)
                 (catch [:exit 255] e :retry)
+                (catch [:prefix :loading] e :retry)
                 (catch Throwable e
                   (warn e "Crash fetching raft-info")
                   :retry))]
@@ -268,6 +269,7 @@
                                                  :role (:raft_role r)
                                                  :node node})))
                                    ; Couldn't run redis-cli
+                                   (catch [:prefix :loading] e [])
                                    (catch [:exit 1]   e [])
                                    (catch [:exit 255]   e [])
                                    (catch [:exit 124] e []))))]
