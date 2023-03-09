@@ -381,6 +381,9 @@
               ; Initialize the cluster on the primary
               (do (cli! :raft.cluster :init)
                   (cli! :raft.debug :exec :debug :populate :6000000 :_dummy :10)
+                  (cli! :set :x :1)
+                  (cli! :set :x :2)
+                  (cli! :raft.debug :compact)
                   (swap! meta-members assoc node {:state :live})
                   (info "Main init done, syncing")
                   (jepsen/synchronize test 600)) ; Compilation can be slow
