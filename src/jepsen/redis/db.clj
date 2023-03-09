@@ -132,9 +132,9 @@
     (c/exec :cp (str build-dir "/" f) (str dir "/"))))
 
 (defn cli!
-  "Runs a Redis CLI command. Includes a 2s timeout."
+  "Runs a Redis CLI command. Includes a 20s timeout."
   [& args]
-  (c/su (apply c/exec :timeout "2s" (str dir "/" cli-binary) args)))
+  (c/su (apply c/exec :timeout "20s" (str dir "/" cli-binary) args)))
 
 (defn raft-info-str
   "Returns the current cluster state as a string."
