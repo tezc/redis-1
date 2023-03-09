@@ -380,6 +380,7 @@
             (if (= node (jepsen/primary test))
               ; Initialize the cluster on the primary
               (do (cli! :raft.cluster :init)
+                  (cli! :raft.debug :exec :debug :populate :6000000 :_dummy :10)
                   (swap! meta-members assoc node {:state :live})
                   (info "Main init done, syncing")
                   (jepsen/synchronize test 600)) ; Compilation can be slow
