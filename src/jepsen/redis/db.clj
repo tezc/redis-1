@@ -397,7 +397,7 @@
                   (swap! meta-members assoc node {:state :live})
                   (cli! :raft.cluster :join (str (jepsen/primary test) ":6379"))))
 
-            (Thread/sleep 10000)
+            (Thread/sleep 30000)
             (info :meta-members meta-members)
             (info :raft-info (raft-info))
             (info :node-state (with-out-str (pprint (node-state test))))
