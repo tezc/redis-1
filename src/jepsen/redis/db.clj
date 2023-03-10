@@ -384,7 +384,7 @@
             (if (= node (jepsen/primary test))
               ; Initialize the cluster on the primary
               (do (cli! :raft.cluster :init)
-                  (cli! :raft.debug :exec :debug :populate :6000000 :_dummy :10)
+                  (cli! :raft.debug :exec :debug :populate :2000000 :_dummy :10)
                   (cli! :set :x :1)
                   (cli! :set :x :2)
                   (cli! :raft.debug :compact)
