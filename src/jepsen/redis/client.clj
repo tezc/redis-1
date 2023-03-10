@@ -82,6 +82,9 @@
            (catch [:prefix :notleader] e#
              (assoc ~op :type :fail, :error :notleader))
 
+           (catch [:prefix :loading] e#
+             (assoc ~op :type :fail, :error :loading))
+
            (catch [:prefix :timeout] e#
              (assoc ~op :type crash# :error :timeout))
 
