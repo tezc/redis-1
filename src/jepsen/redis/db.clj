@@ -269,6 +269,8 @@
                                                  :role (:raft_role r)
                                                  :node node})))
                                    ; Couldn't run redis-cli
+                                   (catch Throwable e
+                                     (warn e "Crash1 fetching raft-info") [])
                                    (catch [:prefix :loading] e [])
                                    (catch [:exit 1]   e [])
                                    (catch [:exit 255]   e [])
