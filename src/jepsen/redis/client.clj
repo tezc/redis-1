@@ -122,6 +122,7 @@
         (condp re-find (.getMessage (:throwable &throw-context))
           ; Don't care, we're being safe!
           #"ERR DISCARD without MULTI" nil
+          #"LOADING Redis is loading the dataset in memory" nil
           ; Something else
           (throw+))))
     ;(info :multi-discarded)
